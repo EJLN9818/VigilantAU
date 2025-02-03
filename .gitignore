@@ -1,0 +1,13 @@
+venv/
+.env
+
+/data/*
+!.gitkeep
+
+*.log
+*.pot
+*.pyc
+__pycache__/
+
+node_modules/
+npm-debug.log

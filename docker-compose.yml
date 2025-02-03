@@ -1,0 +1,34 @@
+services:
+  web:
+    build: .
+    command: bash -c "python manage.py collectstatic --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app/backend
+      - ./static:/app/static
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DJANGO_SETTINGS_MODULE=core.settings
+    depends_on:
+      - db
+  shell:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings
+    command: ["python", "manage.py", "shell_plus"]
+
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: vigilantau
+      POSTGRES_USER: vigilantau
+      POSTGRES_PASSWORD: vigilantau
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+volumes:
+  postgres_data:
